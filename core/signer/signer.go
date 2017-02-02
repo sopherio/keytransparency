@@ -146,6 +146,7 @@ func (s *Signer) CreateEpoch(ctx context.Context, txn transaction.Txn) error {
 		Signatures: map[string]*ctmap.DigitallySigned{s.signer.KeyID(): sig},
 	}
 	if err := s.sths.Append(ctx, txn, epoch, smh); err != nil {
+		txn.Rollback()
 		return fmt.Errorf("Append SMH failure %v", err)
 	}
 	log.Printf("Created epoch %v. SMH: %#x", epoch, root)
